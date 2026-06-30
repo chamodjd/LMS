@@ -20,7 +20,7 @@
                         <li class="menu-item"><a href="{{route('admin.index')}}">Home</a>
                         </li>
                         <li><a href="{{route('admin.about')}}">About</a></li>
-                        <li class="menu-item-has-children"><a href="{{route('admin.course')}}">Course</a>
+                        <li class="menu-item-has-children"><a href="#">Course</a>
                             <ul>
                                 <li><a href="{{route('admin.course')}}">Course</a></li>
                                 <li><a href="{{route('admin.course_details')}}">Course Details</a></li>
@@ -31,17 +31,9 @@
                                 <li><a href="{{route('admin.instructor')}}">Instructor</a></li>
                                 <li><a href="{{route('admin.ins_details')}}">Instructor Details</a></li>
                                 <li><a href="{{route('admin.pricing')}}">Pricing Plan</a></li>
-                                <li><a href="faq.html">Faq Page</a></li>
-                                <li><a href="404.html">404</a></li>
                             </ul>
                         </li>
-                        <li class="menu-item-has-children"><a href="blog.html">Blog</a>
-                            <ul>
-                                <li><a href="blog.html">Blog</a></li>
-                                <li><a href="blog_single.html">Blog Details</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="#" onclick="openContactModal()">Contact</a></li>
                     </ul>
                 </nav>
             </div><!--- END Col -->
@@ -69,14 +61,6 @@
                         <li><a href="instructor.html">Instructor</a></li>
                         <li><a href="ins_details.html">Instructor Details</a></li>
                         <li><a href="pricing.html">Pricing Plan</a></li>
-                        <li><a href="faq.html">Faq Page</a></li>
-                        <li><a href="404.html">404</a></li>
-                    </ul>
-                </li>
-                <li><a href="blog.html">Blog</a>
-                    <ul class="sub-menu">
-                        <li><a href="blog.html">Blog</a></li>
-                        <li><a href="blog_single.html">Blog Details</a></li>
                     </ul>
                 </li>
                 <li><a href="contact.html">Contact</a></li>

@@ -20,3 +20,5 @@ Route::get('/course_details', [\App\Http\Controllers\AdminController::class, 'co
 Route::get('/instructor', [\App\Http\Controllers\AdminController::class, 'instructor'])->name('admin.instructor');
 Route::get('/ins_details', [\App\Http\Controllers\AdminController::class, 'ins_details'])->name('admin.ins_details');
 Route::get('/pricing', [\App\Http\Controllers\AdminController::class, 'pricing'])->name('admin.pricing');
+Route::get('/contact', [\App\Http\Controllers\AdminController::class, 'contact'])->name('admin.contact');
+Route::post('/contact/send', [\App\Http\Controllers\AdminController::class, 'contactSend'])->name('contact.send');

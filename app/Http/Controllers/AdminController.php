@@ -36,9 +36,37 @@ class AdminController extends Controller
         return view('ins_details');
     }
 
+
+
     public function pricing()
     {
         return view('pricing');
+    }
+
+    public function contact()
+    {
+        return view('contact');
+    }
+
+    public function contactSend(Request $request)
+    {
+        $request->validate([
+            'name'    => 'required',
+            'email'   => 'required|email',
+            'subject' => 'required',
+            'message' => 'required',
+        ]);
+
+        $to      = 'example@gmail.com';
+        $subject = $request->subject;
+        $body    = "From: " . $request->name . "\n" .
+            "Email: " . $request->email . "\n" .
+            "Message: " . $request->message;
+        $headers = "From: " . $request->email;
+
+        mail($to, $subject, $body, $headers);
+
+        return response()->json(['message' => 'Message sent successfully!']);
     }
 
 }
