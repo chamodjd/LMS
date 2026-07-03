@@ -39,8 +39,7 @@
             </div><!--- END Col -->
 
             <div class="col-20 d-none d-xl-block text-end align-self-center">
-                <a href="#" class="header-btn">Sign In</a>
-                <a href="contact.html" class="btn_one">Sign Up</a>
+                <a href="{{ route('login') }}" class="btn_one">Log In</a>
             </div><!--- END Col -->
 
             <ul class="mobile_menu">

@@ -95,5 +95,50 @@
     }
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function openUpdateModal(id) {
+        fetch('/get-student/' + id)
+            .then(r => r.json())
+            .then(s => {
+                document.getElementById('modal-reg_no').value = s.reg_no;
+                document.getElementById('modal-name').value = s.name;
+                document.getElementById('modal-address').value = s.address;
+                document.getElementById('modal-dob').value = s.dob;
+                document.getElementById('modal-age').value = s.age;
+                document.getElementById('modal-weight').value = s.weight;
+                document.getElementById('update-form').action = '/update/' + id;
+                new bootstrap.Modal(document.getElementById('updateModal')).show();
+            });
+    }
+
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This will permanently delete the student!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, delete!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+
+    @if(session('success'))
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        timer: 2000,
+        showConfirmButton: false
+    });
+    @endif
+</script>
+
 </body>
 </html>
