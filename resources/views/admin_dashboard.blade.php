@@ -103,79 +103,16 @@
 
                 <div style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:20px;">
                     <div style="font-size:12px; color:#6b7280; margin-bottom:6px;">Average age</div>
-                    <div style="font-size:28px; font-weight:600; color:#111827;">{{ $avgAge }}</div>
+                    <div style="font-size:28px; font-weight:600; color:#111827;"></div>
                     <div style="font-size:12px; color:#6b7280; margin-top:4px;"><i class="fa fa-user"></i> Years old
                     </div>
                 </div>
 
                 <div style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:20px;">
                     <div style="font-size:12px; color:#6b7280; margin-bottom:6px;">Avg weight</div>
-                    <div style="font-size:28px; font-weight:600; color:#111827;">{{ $avgWeight }} kg</div>
+                    <div style="font-size:28px; font-weight:600; color:#111827;"></div>
                     <div style="font-size:12px; color:#6b7280; margin-top:4px;"><i class="fa fa-balance-scale"></i>
                         Average
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Middle Row -->
-            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px;">
-
-                <!-- Recent Students -->
-                <div style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:20px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-                        <h2 style="font-size:15px; font-weight:600; color:#111827;">Recent students</h2>
-                        <a href="#" style="font-size:12px; color:#2563eb; text-decoration:none;">View all</a>
-                    </div>
-
-                    @foreach($recentStudents as $student)
-                        <div
-                            style="display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid #f3f4f6;">
-                            <div
-                                style="width:32px; height:32px; border-radius:50%; background:#dbeafe; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:600; color:#1d4ed8; flex-shrink:0;">
-                                {{ strtoupper(substr($student->name, 0, 2)) }}
-                            </div>
-                            <div>
-                                <div style="font-size:13px; font-weight:500; color:#111827;">{{ $student->name }}</div>
-                                <div style="font-size:11px; color:#9ca3af;">{{ $student->reg_no }}
-                                    · {{ $student->address }}</div>
-                            </div>
-                            <span
-                                style="margin-left:auto; font-size:11px; padding:2px 8px; border-radius:10px; background:#dcfce7; color:#16a34a;">Active</span>
-                        </div>
-                    @endforeach
-
-                </div>
-
-                <!-- Quick Actions -->
-                <div style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:20px;">
-                    <h2 style="font-size:15px; font-weight:600; color:#111827; margin-bottom:16px;">Quick actions</h2>
-
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-                        <a href="/student"
-                           style="display:flex; align-items:center; gap:8px; padding:12px; border:1px solid #e5e7eb; border-radius:8px; text-decoration:none; color:#111827; font-size:13px;">
-                            <i class="fa fa-user-plus" style="color:#2563eb;"></i> Add student
-                        </a>
-                        <a href="#"
-                           style="display:flex; align-items:center; gap:8px; padding:12px; border:1px solid #e5e7eb; border-radius:8px; text-decoration:none; color:#111827; font-size:13px;">
-                            <i class="fa fa-list" style="color:#7c3aed;"></i> Student list
-                        </a>
-                        <a href="#"
-                           style="display:flex; align-items:center; gap:8px; padding:12px; border:1px solid #e5e7eb; border-radius:8px; text-decoration:none; color:#111827; font-size:13px;">
-                            <i class="fa fa-file-excel-o" style="color:#16a34a;"></i> Export Excel
-                        </a>
-                        <a href="#"
-                           style="display:flex; align-items:center; gap:8px; padding:12px; border:1px solid #e5e7eb; border-radius:8px; text-decoration:none; color:#111827; font-size:13px;">
-                            <i class="fa fa-file-pdf-o" style="color:#dc2626;"></i> Export PDF
-                        </a>
-                        <a href="#"
-                           style="display:flex; align-items:center; gap:8px; padding:12px; border:1px solid #e5e7eb; border-radius:8px; text-decoration:none; color:#111827; font-size:13px;">
-                            <i class="fa fa-search" style="color:#d97706;"></i> Search
-                        </a>
-                        <a href="{{ route('admin.contact') }}"
-                           style="display:flex; align-items:center; gap:8px; padding:12px; border:1px solid #e5e7eb; border-radius:8px; text-decoration:none; color:#111827; font-size:13px;">
-                            <i class="fa fa-envelope" style="color:#0891b2;"></i> Contact
-                        </a>
                     </div>
                 </div>
 
@@ -185,54 +122,32 @@
             <div style="background:white; border:1px solid #e5e7eb; border-radius:12px; padding:20px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
                     <h2 style="font-size:15px; font-weight:600; color:#111827;">All students</h2>
-                    <a href="/student"
-                       style="background:#2563eb; color:white; padding:8px 16px; border-radius:8px; text-decoration:none; font-size:13px;">
-                        + Add student
-                    </a>
+                    <button onclick="openAddAccountModal()" style="background:#5D5FEF;color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:700;cursor:pointer;">
+                        + Create student Account
+                    </button>
                 </div>
 
-                <table style="width:100%; border-collapse:collapse; font-size:13px;">
-                    <thead>
-                    <tr style="border-bottom:1px solid #e5e7eb;">
-                        <th style="text-align:left; padding:8px 10px; color:#6b7280; font-weight:500;">#</th>
-                        <th style="text-align:left; padding:8px 10px; color:#6b7280; font-weight:500;">Reg No</th>
-                        <th style="text-align:left; padding:8px 10px; color:#6b7280; font-weight:500;">Name</th>
-                        <th style="text-align:left; padding:8px 10px; color:#6b7280; font-weight:500;">Address</th>
-                        <th style="text-align:left; padding:8px 10px; color:#6b7280; font-weight:500;">DOB</th>
-                        <th style="text-align:left; padding:8px 10px; color:#6b7280; font-weight:500;">Age</th>
-                        <th style="text-align:left; padding:8px 10px; color:#6b7280; font-weight:500;">Weight</th>
-                        <th style="text-align:left; padding:8px 10px; color:#6b7280; font-weight:500;">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($students as $student)
-                        <tr style="border-bottom:1px solid #f3f4f6;">
-                            <td style="padding:8px 10px; color:#111827;">{{ $loop->iteration }}</td>
-                            <td style="padding:8px 10px; color:#2563eb; font-weight:500;">{{ $student->reg_no }}</td>
-                            <td style="padding:8px 10px; color:#111827;">{{ $student->name }}</td>
-                            <td style="padding:8px 10px; color:#6b7280;">{{ $student->address }}</td>
-                            <td style="padding:8px 10px; color:#6b7280;">{{ $student->dob }}</td>
-                            <td style="padding:8px 10px; color:#111827;">{{ $student->age }}</td>
-                            <td style="padding:8px 10px; color:#111827;">{{ $student->weight }}</td>
-                            <td style="padding:8px 10px;">
-                                <button onclick="openUpdateModal({{ $student->id }})"
-                                        style="background:#fef3c7; color:#92400e; border:none; padding:4px 10px; border-radius:6px; font-size:12px; cursor:pointer; margin-right:4px;">
-                                    Edit
-                                </button>
-                                <button onclick="confirmDelete({{ $student->id }})"
-                                        style="background:#fee2e2; color:#991b1b; border:none; padding:4px 10px; border-radius:6px; font-size:12px; cursor:pointer;">
-                                    Delete
-                                </button>
-                                <form id="delete-form-{{ $student->id }}" action="/delete/{{ $student->id }}"
-                                      method="POST" style="display:none">
-                                    @csrf
-                                    @method('DELETE')
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Reg No</th>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>DOB</th>
+                                    <th>Degree</th>
+                                </tr>
+                                </thead>
+                                <tbody id="student-table-body">
+                                @include('components.student_rows', ['students' => $students])
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -295,16 +210,46 @@
         <p style="color:green;">{{ session('message') }}</p>
     @endif
 
-    <form method="POST" action="{{ route('admin.users.store') }}">
-        @csrf
-        <input name="name" placeholder="Name" required>
-        <input name="email" type="email" placeholder="Email" required>
-        <input name="password" type="password" placeholder="Password" required>
-        <select name="role" required>
-            <option value="student">Student</option>
-            <option value="teacher">Teacher</option>
-        </select>
-        <button type="submit">Create account</button>
-    </form>
+    <div id="addAccountModal" style="display:none;position:fixed;inset:0;background:rgba(27,27,51,0.4);z-index:50;align-items:center;justify-content:center;">
+        <div style="background:#fff;border-radius:16px;padding:32px;width:100%;max-width:400px;">
+            <h3 style="margin:0 0 6px 0;color:#1B1B33;">Add account</h3>
+            <p style="margin:0 0 20px 0;color:#8A8AA3;font-size:13px;">Create a login for a teacher or student.</p>
+
+            @if ($errors->any())
+                <div style="background:#FDEDED;color:#E14B4B;padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:16px;">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('admin.users.store') }}">
+                @csrf
+                <input name="name" placeholder="Name" required style="width:100%;padding:11px;margin-bottom:10px;border:1.5px solid #E4E4EF;border-radius:8px;">
+                <input name="email" type="email" placeholder="Email" required style="width:100%;padding:11px;margin-bottom:10px;border:1.5px solid #E4E4EF;border-radius:8px;">
+                <input name="password" type="password" placeholder="Password" required minlength="6" style="width:100%;padding:11px;margin-bottom:10px;border:1.5px solid #E4E4EF;border-radius:8px;">
+
+                <select name="role" id="roleSelect" required onchange="toggleStudentFields()" style="width:100%;padding:11px;margin-bottom:10px;border:1.5px solid #E4E4EF;border-radius:8px;">
+                    <option value="student">Student</option>
+                </select>
+
+                <div id="studentFields">
+                    <input name="address" placeholder="Address" style="width:100%;padding:11px;margin-bottom:10px;border:1.5px solid #E4E4EF;border-radius:8px;">
+                    <input name="dob" type="date" placeholder="Date of birth" style="width:100%;padding:11px;margin-bottom:10px;border:1.5px solid #E4E4EF;border-radius:8px;">
+                    <select name="degree" style="width:100%;padding:11px;margin-bottom:16px;border:1.5px solid #E4E4EF;border-radius:8px;">
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Software Engineering">Software Engineering</option>
+                    </select>
+                </div>
+
+                <div style="display:flex;gap:10px;">
+                    <button type="button" onclick="closeAddAccountModal()" style="flex:1;padding:11px;border-radius:8px;border:1.5px solid #E4E4EF;background:#fff;cursor:pointer;">Cancel</button>
+                    <button type="submit" style="flex:1;padding:11px;border-radius:8px;border:none;background:#5D5FEF;color:#fff;font-weight:700;cursor:pointer;">Create account</button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+
+
 
 @endsection

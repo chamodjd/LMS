@@ -79,14 +79,14 @@ class AdminController extends Controller
         $recentStudents = Student::orderBy('id', 'desc')->take(5)->get();
         $totalStudents = Student::count();
         $stdCount = Student::where('reg_no', 'like', 'STD%')->count();
-        $avgAge = round(Student::avg('age'));
-        $avgWeight = round(Student::avg('weight'));
+
 
         return view('admin_dashboard', compact(
             'students', 'recentStudents', 'totalStudents',
-            'stdCount', 'avgAge', 'avgWeight'
+            'stdCount',
         ));
     }
+
 
     public function storeUser(Request $request)
     {
@@ -95,22 +95,37 @@ class AdminController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'role' => 'required|in:teacher,student',
+            'address' => 'required_if:role,student|string|max:255',
+            'dob' => 'required_if:role,student|date',
+            'degree' => 'required_if:role,student|in:Computer Science,Software Engineering',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
         ]);
 
-        return back()->with('message', ucfirst($data['role']) . ' account created.');
-    }
+        if ($data['role'] === 'student') {
+            // Prefix per subject: CS for Computer Science, SE for Software Engineering
+            $prefix = $data['degree'] === 'Computer Science' ? 'CS' : 'SE';
 
-    public function destroyUser(User $user)
-    {
-        if ($user->role !== 'admin') $user->delete();
-        return back()->with('message', 'Account deleted.');
+            // Count only students already in that same degree, so numbering is separate per subject
+            $countInDegree = Student::where('degree', $data['degree'])->count();
+            $regNo = $prefix . str_pad($countInDegree + 1, 3, '0', STR_PAD_LEFT); // e.g. CS001, SE014
+
+            Student::create([
+                'user_id' => $user->id,
+                'reg_no' => $regNo,
+                'name' => $data['name'],
+                'address' => $data['address'],
+                'dob' => $data['dob'],
+                'degree' => $data['degree'],
+            ]);
+        }
+
+        return redirect()->route('admin.dashboard')->with('message', ucfirst($data['role']) . ' account created' . ($data['role'] === 'student' ? " (Reg No: {$regNo})" : '') . '.');
     }
 
 }

@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-20 align-self-center">
                 <div class="site-logo">
-                    <a href="{{route('admin.index')}}"> <img src={{asset('assets/img/logo.png')}} alt="Logo"></a>
+                    <a> <img src={{asset('assets/img/logo.png')}} alt="Logo"></a>
                 </div>
             </div><!--- END Col -->
 

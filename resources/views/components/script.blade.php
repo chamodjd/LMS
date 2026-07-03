@@ -140,5 +140,25 @@
     @endif
 </script>
 
+{{--create acc--}}
+<script>
+    function openAddAccountModal() {
+        document.getElementById('addAccountModal').style.display = 'flex';
+    }
+    function closeAddAccountModal() {
+        document.getElementById('addAccountModal').style.display = 'none';
+    }
+    @if ($errors->any())
+    document.addEventListener('DOMContentLoaded', openAddAccountModal);
+    @endif
+</script>
+
+<script>
+    function toggleStudentFields() {
+        const role = document.getElementById('roleSelect').value;
+        document.getElementById('studentFields').style.display = (role === 'student') ? 'block' : 'none';
+    }
+</script
+
 </body>
 </html>

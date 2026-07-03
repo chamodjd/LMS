@@ -7,17 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
-    public function up()
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'reg_no',
+        'name',
+        'address',
+        'dob',
+        'degree',
+    ];
+
+    public function user()
     {
-        Schema::create('students', function (Blueprint $table) {
-            $table->id();
-            $table->string('reg_no');
-            $table->string('name');
-            $table->string('address');
-            $table->date('dob');
-            $table->integer('age');
-            $table->decimal('weight', 5, 2);
-            $table->timestamps();
-        });
+        return $this->belongsTo(User::class);
     }
 }
