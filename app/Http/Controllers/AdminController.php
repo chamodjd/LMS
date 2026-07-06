@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Student;   // <-- this line is likely missing
+use App\Models\Course;
+use App\Models\Instructor;
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -79,14 +81,17 @@ class AdminController extends Controller
         $recentStudents = Student::orderBy('id', 'desc')->take(5)->get();
         $totalStudents = Student::count();
         $stdCount = Student::where('reg_no', 'like', 'STD%')->count();
-
+        $accounts = User::where('role', '!=', 'admin')->orderBy('role')->orderBy('name')->get();
+        $instructors = Instructor::all();
+        $totalInstructors = Instructor::count();
+        $totalCourses = Course::count();
+        $courses = Course::all();
 
         return view('admin_dashboard', compact(
             'students', 'recentStudents', 'totalStudents',
-            'stdCount',
+            'stdCount', 'accounts', 'instructors','totalInstructors','totalCourses', 'courses'
         ));
     }
-
 
     public function storeUser(Request $request)
     {
@@ -97,7 +102,12 @@ class AdminController extends Controller
             'role' => 'required|in:teacher,student',
             'address' => 'required_if:role,student|string|max:255',
             'dob' => 'required_if:role,student|date',
-            'degree' => 'required_if:role,student|in:Computer Science,Software Engineering',
+            'degree' => 'required_if:role,student|string|max:150',
+            'mobile_no' => 'required_if:role,teacher|string|max:20',
+            'hire_date' => 'required_if:role,teacher|date',
+            'salary' => 'required_if:role,teacher|numeric|min:0',
+            'department' => 'required_if:role,teacher|string|max:100',
+            'qualification' => 'required_if:role,teacher|string|max:150',
         ]);
 
         $user = User::create([
@@ -108,12 +118,9 @@ class AdminController extends Controller
         ]);
 
         if ($data['role'] === 'student') {
-            // Prefix per subject: CS for Computer Science, SE for Software Engineering
             $prefix = $data['degree'] === 'Computer Science' ? 'CS' : 'SE';
-
-            // Count only students already in that same degree, so numbering is separate per subject
             $countInDegree = Student::where('degree', $data['degree'])->count();
-            $regNo = $prefix . str_pad($countInDegree + 1, 3, '0', STR_PAD_LEFT); // e.g. CS001, SE014
+            $regNo = $prefix . str_pad($countInDegree + 1, 3, '0', STR_PAD_LEFT);
 
             Student::create([
                 'user_id' => $user->id,
@@ -125,7 +132,56 @@ class AdminController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.dashboard')->with('message', ucfirst($data['role']) . ' account created' . ($data['role'] === 'student' ? " (Reg No: {$regNo})" : '') . '.');
+        if ($data['role'] === 'teacher') {
+            $countInstructors = Instructor::count();
+            $empNo = 'EMP' . str_pad($countInstructors + 1, 3, '0', STR_PAD_LEFT);
+
+            Instructor::create([
+                'user_id' => $user->id,
+                'emp_no' => $empNo,
+                'name' => $data['name'],
+                'mobile_no' => $data['mobile_no'],
+                'hire_date' => $data['hire_date'],
+                'salary' => $data['salary'],
+                'department' => $data['department'],
+                'qualification' => $data['qualification'],
+            ]);
+        }
+
+        return back()->with('message', ucfirst($data['role']) . ' account created.');
+    }
+
+    public function studentsPage()
+    {
+        $students = Student::all();
+
+        return view('admin_students', compact('students'));
+    }
+
+    public function instructorsPage()
+    {
+        $instructors = Instructor::all();
+
+        return view('admin_instructor', compact('instructors'));
+    }
+    public function coursesPage()
+    {
+        $courses = Course::all();
+
+        return view('admin_courses', compact('courses'));
+    }
+
+    public function storeCourse(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:150',
+            'duration' => 'required|integer|min:1',
+            'price' => 'required|numeric|min:0',
+        ]);
+
+        Course::create($data);
+
+        return back()->with('message', 'Course added.');
     }
 
 }

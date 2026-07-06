@@ -30,6 +30,8 @@ Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'dashboa
 Route::get('/student-dashboard', [\App\Http\Controllers\StudentController::class, 'studentDashboard'])->name('student.dashboard');
 Route::get('/teacher-dashboard', [\App\Http\Controllers\TeacherController::class, 'teacherDashboard'])->name('teacher.dashboard');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/admin/courses', [AdminController::class, 'coursesPage'])->name('admin.courses');
+Route::post('/admin/courses', [AdminController::class, 'storeCourse'])->name('admin.courses.store');
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -37,6 +39,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/students', [AdminController::class, 'studentsPage'])->name('admin.students');
+    Route::get('/admin/instructors', [AdminController::class, 'instructorsPage'])->name('admin.instructors');
     Route::post('/admin/users', [AdminController::class, 'storeUser'])->name('admin.users.store');
     Route::delete('/admin/users/{user}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
 });
