@@ -83,7 +83,7 @@
                 </div>
                 <div style="background:white; border-radius:12px; padding:20px; border-left:4px solid #d97706;">
                     <div style="font-size:12px; color:#6b7280; margin-bottom:6px;">Avg student age</div>
-                    <div style="font-size:28px; font-weight:600; color:#064e3b;">{{ $avgAge }}</div>
+                    <div style="font-size:28px; font-weight:600; color:#064e3b;"></div>
                     <div style="font-size:12px; color:#d97706; margin-top:4px;"><i class="fa fa-user"></i> Years</div>
                 </div>
                 <div style="background:white; border-radius:12px; padding:20px; border-left:4px solid #dc2626;">

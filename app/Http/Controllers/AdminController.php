@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Course;
 use App\Models\Instructor;
 use App\Models\Student;
@@ -118,7 +119,17 @@ class AdminController extends Controller
         ]);
 
         if ($data['role'] === 'student') {
-            $prefix = $data['degree'] === 'Computer Science' ? 'CS' : 'SE';
+            $words = preg_split('/\s+/', trim($data['degree']));
+
+            if (count($words) === 1) {
+                $prefix = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $words[0]), 0, 3));
+            } else {
+                $prefix = '';
+                foreach ($words as $word) {
+                    $prefix .= strtoupper(substr($word, 0, 1));
+                }
+            }
+
             $countInDegree = Student::where('degree', $data['degree'])->count();
             $regNo = $prefix . str_pad($countInDegree + 1, 3, '0', STR_PAD_LEFT);
 
@@ -133,8 +144,12 @@ class AdminController extends Controller
         }
 
         if ($data['role'] === 'teacher') {
-            $countInstructors = Instructor::count();
-            $empNo = 'EMP' . str_pad($countInstructors + 1, 3, '0', STR_PAD_LEFT);
+
+            $prefix = strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $data['department']), 0, 3));
+
+
+            $countInDept = Instructor::where('department', $data['department'])->count();
+            $empNo = $prefix . str_pad($countInDept + 1, 3, '0', STR_PAD_LEFT);
 
             Instructor::create([
                 'user_id' => $user->id,
@@ -154,8 +169,9 @@ class AdminController extends Controller
     public function studentsPage()
     {
         $students = Student::all();
+        $courses = Course::all();
 
-        return view('admin_students', compact('students'));
+        return view('admin_students', compact('students', 'courses'));
     }
 
     public function instructorsPage()
@@ -182,6 +198,195 @@ class AdminController extends Controller
         Course::create($data);
 
         return back()->with('message', 'Course added.');
+    }
+
+    public function updateStudent(Request $request, Student $student)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:100',
+            'address' => 'required|string|max:255',
+            'dob' => 'required|date',
+            'degree' => 'required|string|max:150',
+        ]);
+
+        $student->update($data);
+
+        return back()->with('message', 'Student updated.');
+    }
+
+    public function destroyStudent(Student $student)
+    {
+        $student->delete();
+
+        return back()->with('message', 'Student deleted.');
+    }
+
+    public function updateCourse(Request $request, Course $course)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:150',
+            'duration' => 'required|integer|min:1',
+            'price' => 'required|numeric|min:0',
+        ]);
+
+        $course->update($data);
+
+        return back()->with('message', 'Course updated.');
+    }
+
+    public function destroyCourse(Course $course)
+    {
+        $course->delete();
+
+        return back()->with('message', 'Course deleted.');
+    }
+
+    public function updateInstructor(Request $request, Instructor $instructor)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:100',
+            'mobile_no' => 'required|string|max:20',
+            'hire_date' => 'required|date',
+            'salary' => 'required|numeric|min:0',
+            'department' => 'required|string|max:100',
+            'qualification' => 'nullable|string|max:150',
+        ]);
+
+        $instructor->update($data);
+
+        return back()->with('message', 'Instructor updated.');
+    }
+
+    public function destroyInstructor(Instructor $instructor)
+    {
+        $instructor->delete();
+
+        return back()->with('message', 'Instructor deleted.');
+    }
+
+
+    public function importStudents(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:csv,txt',
+        ]);
+
+        $file = $request->file('excel_file');
+        $handle = fopen($file->getRealPath(), 'r');
+        fgetcsv($handle); // skip header row
+
+        while (($row = fgetcsv($handle)) !== false) {
+            Student::create([
+                'reg_no'  => $row[0],
+                'name'    => $row[1],
+                'address' => $row[2],
+                'dob'     => $row[3],
+                'degree'  => $row[4],
+            ]);
+        }
+        fclose($handle);
+
+        return redirect()->route('admin.students')->with('success', 'Students imported successfully!');
+    }
+
+    public function exportStudentsPdf(Request $request)
+    {
+        $search = $request->query('search');
+
+        if ($search) {
+            $students = Student::where('name', 'like', "%{$search}%")
+                ->orWhere('reg_no', 'like', "%{$search}%")
+                ->orWhere('address', 'like', "%{$search}%")
+                ->orWhere('degree', 'like', "%{$search}%")
+                ->get();
+        } else {
+            $students = Student::all();
+        }
+
+        $pdf = Pdf::loadView('admin_student_pdf', compact('students'));
+
+        $exportPath = public_path('exports');
+        if (!file_exists($exportPath)) {
+            mkdir($exportPath, 0755, true);
+        }
+
+        $pdf->save($exportPath . '/students.pdf');
+
+        return view('admin_student_pdf', compact('students'));
+    }
+
+    public function importInstructors(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:csv,txt',
+        ]);
+
+        $file = $request->file('excel_file');
+        $handle = fopen($file->getRealPath(), 'r');
+        fgetcsv($handle); // skip header row
+
+        while (($row = fgetcsv($handle)) !== false) {
+            Instructor::create([
+                'emp_no'        => $row[0],
+                'name'          => $row[1],
+                'mobile_no'     => $row[2],
+                'hire_date'     => $row[3],
+                'salary'        => $row[4],
+                'department'    => $row[5],
+                'qualification' => $row[6],
+            ]);
+        }
+        fclose($handle);
+
+        return redirect()->route('admin.instructors')->with('message', 'Instructors imported successfully!');
+    }
+
+    public function exportInstructorsPdf(Request $request)
+    {
+        $search = $request->query('search');
+
+        if ($search) {
+            $instructors = Instructor::where('name', 'like', "%{$search}%")
+                ->orWhere('emp_no', 'like', "%{$search}%")
+                ->orWhere('department', 'like', "%{$search}%")
+                ->orWhere('qualification', 'like', "%{$search}%")
+                ->get();
+        } else {
+            $instructors = Instructor::all();
+        }
+
+        $pdf = Pdf::loadView('admin_instructor_pdf', compact('instructors'));
+
+        $exportPath = public_path('exports');
+        if (!file_exists($exportPath)) {
+            mkdir($exportPath, 0755, true);
+        }
+
+        $pdf->save($exportPath . '/instructors.pdf');
+
+        return view('admin_instructor_pdf', compact('instructors'));
+    }
+
+    public function exportCoursesPdf(Request $request)
+    {
+        $search = $request->query('search');
+
+        if ($search) {
+            $courses = Course::where('name', 'like', "%{$search}%")->get();
+        } else {
+            $courses = Course::all();
+        }
+
+        $pdf = Pdf::loadView('admin_course_pdf', compact('courses'));
+
+        $exportPath = public_path('exports');
+        if (!file_exists($exportPath)) {
+            mkdir($exportPath, 0755, true);
+        }
+
+        $pdf->save($exportPath . '/courses.pdf');
+
+        return view('admin_course_pdf', compact('courses'));
     }
 
 }

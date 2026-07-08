@@ -32,6 +32,17 @@ Route::get('/teacher-dashboard', [\App\Http\Controllers\TeacherController::class
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::get('/admin/courses', [AdminController::class, 'coursesPage'])->name('admin.courses');
 Route::post('/admin/courses', [AdminController::class, 'storeCourse'])->name('admin.courses.store');
+Route::put('/admin/students/{student}', [AdminController::class, 'updateStudent'])->name('admin.students.update');
+Route::delete('/admin/students/{student}', [AdminController::class, 'destroyStudent'])->name('admin.students.destroy');
+Route::put('/admin/courses/{course}', [AdminController::class, 'updateCourse'])->name('admin.courses.update');
+Route::delete('/admin/courses/{course}', [AdminController::class, 'destroyCourse'])->name('admin.courses.destroy');
+Route::put('/admin/instructors/{instructor}', [AdminController::class, 'updateInstructor'])->name('admin.instructors.update');
+Route::delete('/admin/instructors/{instructor}', [AdminController::class, 'destroyInstructor'])->name('admin.instructors.destroy');
+Route::post('/admin/students/import', [AdminController::class, 'importStudents'])->name('admin.students.import');
+Route::get('/admin/students/export/pdf', [AdminController::class, 'exportStudentsPdf'])->name('admin.students.export.pdf');
+Route::post('/admin/instructors/import', [AdminController::class, 'importInstructors'])->name('admin.instructors.import');
+Route::get('/admin/instructors/export-pdf', [AdminController::class, 'exportInstructorsPdf'])->name('admin.instructors.export.pdf');
+Route::get('/admin/courses/export-pdf', [AdminController::class, 'exportCoursesPdf'])->name('admin.courses.export.pdf');
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);

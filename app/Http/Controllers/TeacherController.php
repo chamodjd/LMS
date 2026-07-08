@@ -12,7 +12,6 @@ class TeacherController extends Controller
         $students = Student::all();
         $recentStudents = Student::orderBy('id', 'desc')->take(5)->get();
         $totalStudents = Student::count();
-        $avgAge = round(Student::avg('age'));
-        return view('teacher_dashboard', compact('students', 'recentStudents', 'totalStudents', 'avgAge'));
+        return view('teacher_dashboard', compact('students', 'recentStudents', 'totalStudents', ));
     }
 }

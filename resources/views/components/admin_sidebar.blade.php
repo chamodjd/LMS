@@ -49,24 +49,6 @@
             <i class="fa fa-certificate"></i> Instructors
         </a>
 
-        <div style="font-size:11px; color:#9ca3af; padding:15px 20px 5px; letter-spacing:0.05em;">MANAGEMENT</div>
-
-        <a href="#" class="sidebar-link"
-           style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:14px; color:#6b7280; text-decoration:none;">
-            <i class="fa fa-file-excel-o"></i> Export Excel
-        </a>
-
-        <a href="#" class="sidebar-link"
-           style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:14px; color:#6b7280; text-decoration:none;">
-            <i class="fa fa-file-pdf-o"></i> Export PDF
-        </a>
-
-        <a href="#" class="sidebar-link"
-           style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:14px; color:#6b7280; text-decoration:none;">
-            <i class="fa fa-calendar"></i> Schedule
-        </a>
-
-
 
         <div style="font-size:11px; color:#9ca3af; padding:15px 20px 5px; letter-spacing:0.05em;">SYSTEM</div>
 
