@@ -30,48 +30,53 @@
 <script>
     function openContactModal() {
         Swal.fire({
-            title: 'Contact Us',
             html: `
-            <div style="text-align:left">
-                <div class="mb-2">
-                    <label style="font-weight:bold">Name</label>
-                    <input type="text" id="contact-name" class="swal2-input" placeholder="Your Name">
-                </div>
-                <div class="mb-2">
-                    <label style="font-weight:bold">Email</label>
-                    <input type="email" id="contact-email" class="swal2-input" placeholder="Your Email">
-                </div>
-                <div class="mb-2">
-                    <label style="font-weight:bold">Subject</label>
-                    <input type="text" id="contact-subject" class="swal2-input" placeholder="Subject">
-                </div>
-                <div class="mb-2">
-                    <label style="font-weight:bold">Message</label>
-                    <textarea id="contact-message" class="swal2-textarea" placeholder="Your Message"></textarea>
-                </div>
-            </div>
-        `,
+    <div style="text-align:left">
+        <div class="mb-2">
+            <label style="font-weight:bold">Name</label>
+            <input type="text" id="contact-name" class="swal2-input" placeholder="Your Name">
+        </div>
+        <div class="mb-2">
+            <label style="font-weight:bold">Phone</label>
+            <input type="text" id="contact-phone" class="swal2-input" placeholder="Your Phone Number">
+        </div>
+        <div class="mb-2">
+            <label style="font-weight:bold">Email</label>
+            <input type="email" id="contact-email" class="swal2-input" placeholder="Your Email">
+        </div>
+        <div class="mb-2">
+            <label style="font-weight:bold">Subject</label>
+            <input type="text" id="contact-subject" class="swal2-input" placeholder="Subject">
+        </div>
+        <div class="mb-2">
+            <label style="font-weight:bold">Message</label>
+            <textarea id="contact-message" class="swal2-textarea" placeholder="Your Message"></textarea>
+        </div>
+    </div>
+`,
             showCancelButton: true,
             confirmButtonText: 'Send Message',
             confirmButtonColor: '#0d6efd',
             cancelButtonColor: '#6c757d',
             preConfirm: () => {
                 const name    = document.getElementById('contact-name').value;
+                const phone   = document.getElementById('contact-phone').value;
                 const email   = document.getElementById('contact-email').value;
                 const subject = document.getElementById('contact-subject').value;
                 const message = document.getElementById('contact-message').value;
 
-                if (!name || !email || !subject || !message) {
+                if (!name || !phone || !email || !subject || !message) {
                     Swal.showValidationMessage('Please fill all fields!');
                     return false;
                 }
-                return { name, email, subject, message };
+                return { name, phone, email, subject, message };
             }
         }).then((result) => {
             if (result.isConfirmed) {
                 const formData = new FormData();
                 formData.append('_token', '{{ csrf_token() }}');
                 formData.append('name', result.value.name);
+                formData.append('contact_no', result.value.phone);
                 formData.append('email', result.value.email);
                 formData.append('subject', result.value.subject);
                 formData.append('message', result.value.message);
@@ -190,13 +195,15 @@ row.style.display = text.includes(filter) ? '' : 'none';
 });
 }
 
-function openUpdateCourseModal(id, name, duration, price) {
-document.getElementById('modal-course-name').value = name;
-document.getElementById('modal-course-duration').value = duration;
-document.getElementById('modal-course-price').value = price;
-document.getElementById('update-course-form').action = '/admin/courses/' + id;
+function openUpdateCourseModal(id, name, code, department, duration, price) {
+    document.getElementById('modal-course-name').value = name;
+    document.getElementById('modal-course-code').value = code;
+    document.getElementById('modal-course-department').value = department;
+    document.getElementById('modal-course-duration').value = duration;
+    document.getElementById('modal-course-price').value = price;
+    document.getElementById('update-course-form').action = '/admin/courses/' + id;
 
-$('#updateCourseModal').modal('show');
+    $('#updateCourseModal').modal('show');
 }
 
 function confirmDeleteCourse(id) {
@@ -328,5 +335,177 @@ function exportFilteredCourses() {
 const searchValue = document.getElementById('courseSearch').value;
 document.getElementById('exportCourseSearch').value = searchValue;
 document.getElementById('exportCourseForm').submit();
+}
+</script>
+
+<script>
+function toggleDarkMode() {
+document.body.classList.toggle('dark-mode');
+const isDark = document.body.classList.contains('dark-mode');
+localStorage.setItem('darkMode', isDark);
+updateDarkModeIcon(isDark);
+}
+
+function updateDarkModeIcon(isDark) {
+const icon = document.getElementById('darkModeIcon');
+if (icon) {
+icon.className = isDark ? 'fa fa-sun-o' : 'fa fa-moon-o';
+}
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+const isDark = localStorage.getItem('darkMode') === 'true';
+if (isDark) {
+document.body.classList.add('dark-mode');
+}
+updateDarkModeIcon(isDark);
+});
+</script>
+
+<script>
+function openAddModuleModal() {
+document.getElementById('addModuleModal').style.display = 'flex';
+}
+function closeAddModuleModal() {
+document.getElementById('addModuleModal').style.display = 'none';
+}
+
+function openUpdateModuleModal(id, title, description, instructorId) {
+    document.getElementById('modal-module-title').value = title;
+    document.getElementById('modal-module-description').value = description;
+    document.getElementById('modal-module-instructor').value = instructorId || '';
+    document.getElementById('update-module-form').action = '/admin/modules/' + id;
+    document.getElementById('updateModuleModal').style.display = 'flex';
+}
+function closeUpdateModuleModal() {
+document.getElementById('updateModuleModal').style.display = 'none';
+}
+
+function confirmDeleteModule(id) {
+Swal.fire({
+title: 'Delete this module?',
+text: 'This cannot be undone.',
+icon: 'warning',
+showCancelButton: true,
+confirmButtonText: 'Yes, delete',
+confirmButtonColor: '#E14B4B',
+}).then((result) => {
+if (result.isConfirmed) {
+document.getElementById('delete-module-form-' + id).submit();
+}
+});
+}
+</script>
+
+<script>
+    function generatePrefix(name) {
+        const words = name.trim().split(/\s+/).filter(Boolean);
+        if (words.length === 0) return '';
+        if (words.length === 1) {
+            return words[0].replace(/[^A-Za-z]/g, '').substring(0, 3).toUpperCase();
+        }
+        return words.map(w => w.charAt(0).toUpperCase()).join('');
+    }
+
+    function suggestCourseCode() {
+        const nameInput = document.getElementById('courseNameInput');
+        const codeInput = document.getElementById('courseCodeInput');
+        if (!codeInput.dataset.userEdited) {
+            codeInput.value = generatePrefix(nameInput.value);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const codeInput = document.getElementById('courseCodeInput');
+        if (codeInput) {
+            codeInput.addEventListener('input', function () {
+                this.dataset.userEdited = 'true';
+            });
+        }
+    });
+</script>
+
+<script>
+function previewDeptPrefix() {
+const input = document.getElementById('deptNameInput');
+const preview = document.getElementById('deptPrefixPreview');
+const prefix = generatePrefix(input.value);
+
+if (prefix) {
+preview.innerHTML = `Emp No prefix: <strong style="color:#4f46e5;">${prefix}001</strong>`;
+} else {
+preview.innerHTML = '';
+}
+}
+</script>
+<script>
+@if ($errors->any() && old('name') !== null)
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('addCourseModal').style.display = 'flex';
+        });
+
+@endif
+    </script>
+
+<script>
+function showTab(tab) {
+document.querySelectorAll('.module-tab-content').forEach(el => el.style.display = 'none');
+document.querySelectorAll('.module-tab').forEach(el => {
+el.style.color = '#6b7280';
+el.style.borderBottomColor = 'transparent';
+el.style.fontWeight = 'normal';
+});
+document.getElementById('content-' + tab).style.display = 'block';
+const activeTab = document.getElementById('tab-' + tab);
+activeTab.style.color = '#5D5FEF';
+activeTab.style.borderBottomColor = '#5D5FEF';
+activeTab.style.fontWeight = '600';
+}
+
+function openAddTopicModal() { document.getElementById('addTopicModal').style.display = 'flex'; }
+function openAddAssignmentModal() { document.getElementById('addAssignmentModal').style.display = 'flex'; }
+function openAddExamModal() { document.getElementById('addExamModal').style.display = 'flex'; }
+
+function openAddQuestionModal(examId) {
+    const basePath = window.location.pathname.startsWith('/teacher') ? '/teacher' : '/admin';
+    document.getElementById('add-question-form').action = basePath + '/exams/' + examId + '/questions';
+    document.getElementById('addQuestionModal').style.display = 'flex';
+}
+
+function closeModal(id) {
+document.getElementById(id).style.display = 'none';
+}
+
+function confirmDeleteGeneric(formId) {
+Swal.fire({
+title: 'Are you sure?',
+text: 'This cannot be undone.',
+icon: 'warning',
+showCancelButton: true,
+confirmButtonText: 'Yes, delete',
+confirmButtonColor: '#E14B4B',
+}).then((result) => {
+if (result.isConfirmed) {
+document.getElementById(formId).submit();
+}
+});
+}
+</script>
+
+<script>
+function confirmPublishExam(formId) {
+Swal.fire({
+title: 'Publish this exam?',
+text: 'Once published, students will be able to see and take it. Make sure all questions are correct.',
+icon: 'question',
+showCancelButton: true,
+confirmButtonText: 'Yes, publish',
+confirmButtonColor: '#16a34a',
+}).then((result) => {
+if (result.isConfirmed) {
+document.getElementById(formId).submit();
+}
+});
 }
 </script>

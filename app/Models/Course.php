@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
-    use HasFactory;
+    protected $fillable = ['name', 'code', 'department', 'duration', 'price'];
 
-    protected $fillable = ['name', 'duration', 'price'];
+    public function modules()
+    {
+        return $this->hasMany(CourseModule::class)->orderBy('order');
+    }
 }

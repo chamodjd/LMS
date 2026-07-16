@@ -125,9 +125,13 @@
                        style="width:100%;padding:11px;margin-bottom:10px;border:1.5px solid #E4E4EF;border-radius:8px;">
                 <input name="salary" type="number" step="0.01" placeholder="Salary" required
                        style="width:100%;padding:11px;margin-bottom:10px;border:1.5px solid #E4E4EF;border-radius:8px;">
-                <input name="department" placeholder="Department" required
+                <input name="department" id="deptNameInput" oninput="previewDeptPrefix()" placeholder="Department"
+                       required
+                       style="width:100%;padding:11px;margin-bottom:6px;border:1.5px solid #E4E4EF;border-radius:8px;">
+                <div id="deptPrefixPreview"
+                     style="margin-bottom:10px; font-size:12px; color:#6b7280; min-height:16px;"></div>
+                <input name="qualification" placeholder="Qualification" required
                        style="width:100%;padding:11px;margin-bottom:16px;border:1.5px solid #E4E4EF;border-radius:8px;">
-                <input name="qualification" placeholder="Qualification" required style="width:100%;padding:11px;margin-bottom:16px;border:1.5px solid #E4E4EF;border-radius:8px;">
                 <div style="display:flex;gap:10px;">
                     <button type="button" onclick="closeAddInstructorModal()"
                             style="flex:1;padding:11px;border-radius:8px;border:1.5px solid #E4E4EF;background:#fff;cursor:pointer;">
@@ -175,7 +179,8 @@
                            style="width:100%;padding:11px;margin-bottom:10px;border:1.5px solid #E4E4EF;border-radius:8px;">
                     <input name="dob" type="date" placeholder="Date of birth"
                            style="width:100%;padding:11px;margin-bottom:10px;border:1.5px solid #E4E4EF;border-radius:8px;">
-                    <select name="degree" style="width:100%;padding:11px;margin-bottom:16px;border:1.5px solid #E4E4EF;border-radius:8px;">
+                    <select name="degree"
+                            style="width:100%;padding:11px;margin-bottom:16px;border:1.5px solid #E4E4EF;border-radius:8px;">
                         @foreach ($courses as $course)
                             <option value="{{ $course->name }}">{{ $course->name }}</option>
                         @endforeach
@@ -214,21 +219,27 @@
 
             <form method="POST" action="{{ route('admin.courses.store') }}">
                 @csrf
-                <input name="name" placeholder="Course name" required
+                <input name="name" id="courseNameInput" oninput="suggestCourseCode()" placeholder="Course name" required
+                       style="width:100%;padding:11px;margin-bottom:10px;border:1.5px solid #E4E4EF;border-radius:8px;">
+                <input name="code" id="courseCodeInput" placeholder="Course code (e.g. CS)" required maxlength="10"
+                       style="width:100%;padding:11px;margin-bottom:10px;border:1.5px solid #E4E4EF;border-radius:8px;text-transform:uppercase;">
+                <input name="department" placeholder="Department (e.g. IT)" required
                        style="width:100%;padding:11px;margin-bottom:10px;border:1.5px solid #E4E4EF;border-radius:8px;">
                 <input name="duration" type="number" placeholder="Duration (years)" required
                        style="width:100%;padding:11px;margin-bottom:10px;border:1.5px solid #E4E4EF;border-radius:8px;">
                 <input name="price" type="number" step="0.01" placeholder="Price" required
                        style="width:100%;padding:11px;margin-bottom:16px;border:1.5px solid #E4E4EF;border-radius:8px;">
                 <div style="display:flex;gap:10px;">
-                    <button type="button" onclick="closeAddCourseModal()"
-                            style="flex:1;padding:11px;border-radius:8px;border:1.5px solid #E4E4EF;background:#fff;cursor:pointer;">
-                        Cancel
-                    </button>
-                    <button type="submit"
-                            style="flex:1;padding:11px;border-radius:8px;border:none;background:#5D5FEF;color:#fff;font-weight:700;cursor:pointer;">
-                        Create course
-                    </button>
+                    <div style="display:flex;gap:10px;">
+                        <button type="button" onclick="closeAddCourseModal()"
+                                style="flex:1;padding:11px;border-radius:8px;border:1.5px solid #E4E4EF;background:#fff;cursor:pointer;">
+                            Cancel
+                        </button>
+                        <button type="submit"
+                                style="flex:1;padding:11px;border-radius:8px;border:none;background:#5D5FEF;color:#fff;font-weight:700;cursor:pointer;">
+                            Create course
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>

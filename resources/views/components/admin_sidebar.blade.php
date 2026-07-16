@@ -21,7 +21,14 @@
         <div
             style="padding:0 20px 20px; font-size:18px; font-weight:600; color:#1e40af; display:flex; align-items:center; gap:8px;">
             <i class="fa fa-graduation-cap"></i> LMS Admin
+
+            <button id="darkModeToggle" onclick="toggleDarkMode()"
+                    style="background:none; border:1px solid #e5e7eb; border-radius:6px; padding:6px 10px; cursor:pointer; font-size:14px; margin-right:10px;">
+                <i id="darkModeIcon" class="fa fa-moon-o"></i>
+            </button>
+
         </div>
+
 
         <div style="font-size:11px; color:#9ca3af; padding:10px 20px 5px; letter-spacing:0.05em;">Main</div>
 
@@ -51,6 +58,7 @@
 
 
         <div style="font-size:11px; color:#9ca3af; padding:15px 20px 5px; letter-spacing:0.05em;">SYSTEM</div>
+
 
         <a href="{{ route('admin.contact') }}" class="sidebar-link"
            style="display:flex; align-items:center; gap:10px; padding:10px 20px; font-size:14px; color:#6b7280; text-decoration:none;">

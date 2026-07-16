@@ -82,7 +82,7 @@
                 }
             </style>
 
-            <table class="table table-bordered table-hover table-striped" id="studentTable">
+            <table class="table table-hover" id="studentTable">
                 <thead>
                 <tr>
                     <th>ID</th>

@@ -58,5 +58,7 @@ class Kernel extends HttpKernel
         'auth' => \App\Http\Middleware\Authenticate::class,
         // ... other existing entries stay as they are ...
         'role' => \App\Http\Middleware\RoleMiddleware::class,
+
+        'teacher.module' => \App\Http\Middleware\EnsureTeacherOwnsModule::class,
     ];
 }
